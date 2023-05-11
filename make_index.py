@@ -9,7 +9,7 @@ def create_index_html(path):
 
         for name in os.listdir(path):
             # Skip .git directories and index.html files
-            if name == ".git" or name == "index.html":
+            if name == ".git" or name == "index.html" or name == "make_index.py" or name == "_headers":
                 continue
 
             full_path = os.path.join(path, name)
