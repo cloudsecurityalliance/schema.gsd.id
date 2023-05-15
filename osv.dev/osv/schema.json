@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schema.gsd.id/gsd.id/osv-gsd/schema.json",
+  "$id": "https://raw.githubusercontent.com/ossf/osv-schema/main/validation/schema.json",
   "title": "Open Source Vulnerability",
   "description": "A schema for describing a vulnerability in an open source package.",
   "type": "object",
@@ -8,29 +8,20 @@
     "schema_version": {
       "type": "string"
     },
-    "schema_type": {
-      "type": "string",
-      "enum": [
-        "OSV-GSD"
-      ]
-    },
-    "osv_gsd_schema_version": {
-      "type": "string",
-      "enum": [
-        "1.0.0"
-      ]
-    },
     "id": {
       "type": "string"
     },
     "modified": {
-      "$ref": "#/$defs/timestamp"
+      "type": "string",
+      "format": "date-time"
     },
     "published": {
-      "$ref": "#/$defs/timestamp"
+      "type": "string",
+      "format": "date-time"
     },
     "withdrawn": {
-      "$ref": "#/$defs/timestamp"
+      "type": "string",
+      "format": "date-time"
     },
     "aliases": {
       "type": ["array", "null"],
@@ -44,27 +35,6 @@
         "type": "string"
       }
     },
-    "relationships": {
-      "type": "array",
-      "items": {
-        "type": {
-          "type": "string",
-          "enum": [
-            "ALIAS", 
-            "CAUSES", 
-            "CAUSED_BY", 
-            "COMMON_NAME", 
-            "DUPLICATED_BY", 
-            "DUPLICATE_OF", 
-            "INCOMPLETE_FIX_FOR", 
-            "INSUFFICIENT_FIX_OF", 
-            "RELATED"
-          ]
-        },
-        "id": "string",
-        "canonical_url": "string"
-      }
-    },
     "summary": {
       "type": "string"
     },
@@ -72,7 +42,26 @@
       "type": "string"
     },
     "severity": {
-      "$ref": "#/$defs/severity"
+      "type": ["array", "null"],
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "CVSS_V2",
+              "CVSS_V3"
+            ]
+          },
+          "score": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "score"
+        ]
+      }
     },
     "affected": {
       "type": ["array", "null"],
@@ -98,7 +87,26 @@
             ]
           },
           "severity": {
-            "$ref": "#/$defs/severity"
+            "type": ["array", "null"],
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "CVSS_V2",
+                    "CVSS_V3"
+                  ]
+                },
+                "score": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "type",
+                "score"
+              ]
+            }
           },
           "ranges": {
             "type": "array",
@@ -110,8 +118,7 @@
                   "enum": [
                     "GIT",
                     "SEMVER",
-                    "ECOSYSTEM",
-                    "TIMESTAMP"
+                    "ECOSYSTEM"
                   ]
                 },
                 "repo": {
@@ -312,70 +319,5 @@
   "required": [
     "id",
     "modified"
-  ],
-  "$defs": {
-    "severity": {
-      "type": ["array", "null"],
-      "items": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "CVSS_V2",
-              "CVSS_V3",
-              "EPSS"
-            ]
-          },
-          "score": {
-            "type": "string"
-          }
-        },
-        "allOf": [
-          {
-            "if": {
-              "properties": {
-                "type": {
-                  "const": "CVSS_V2"
-                }
-              }
-            },
-            "then": {
-              "properties": {
-                "score": {
-                  "pattern": "AV:[NAL]\\/AC:[LMH]\\/A[Uu]:[NSM]\\/C:[NPC]\\/I:[NPC]\\/A:[NPC]"
-                }
-              }
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "type": {
-                  "const": "CVSS_V3"
-                }
-              }
-            },
-            "then": {
-              "properties": {
-                "score": {
-                  "pattern": "CVSS:3\\.[0-9]/AV:[NALP]\\/AC:[LH]\\/PR:[NLH]\\/UI:[NR]\\/S:[UC]\\/C:[NLH]\\/I:[NLH]\\/A:[NLH]"
-                }
-              }
-            }
-          }
-        ],
-        "required": [
-          "type",
-          "score"
-        ]
-      }
-    },
-    "timestamp": {
-      "type": "string",
-      "format": "date-time",
-      "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z"
-    }
-  },
-  "additionalProperties": false
+  ]
 }
