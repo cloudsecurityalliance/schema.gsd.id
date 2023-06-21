@@ -7,7 +7,7 @@ def create_index_html(path):
         index_file.write('<body>\n')
         index_file.write('<ul>\n')
 
-        for name in os.listdir(path):
+        for name in sorted(os.listdir(path)):
             # Skip .git directories and index.html files
             if name == ".git" or name == "index.html" or name == "make_index.py" or name == "_headers":
                 continue
